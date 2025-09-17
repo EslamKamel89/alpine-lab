@@ -19,10 +19,10 @@
       <header>
         <div class="flex w-full justify-between">
           <h1>Welcome to alpine</h1>
-          <div
-            class="text-4xl rounded-full p-2 border my-2"
-            x-text="points"
-          ></div>
+          <div class="rounded-full p-2 border my-2">
+            <span class="text-4xl" x-text="points"></span>
+            <span class="text-xs">pts</span>
+          </div>
         </div>
       </header>
       <main>
@@ -58,16 +58,30 @@
         get flippedCards() {
           return this.cards.filter((c) => c.flipped);
         },
+        get clearedCards() {
+          return this.cards.filter((c) => c.cleared);
+        },
+        get remainingCards() {
+          return this.cards.filter((c) => !c.cleared);
+        },
         get points() {
-          return 5;
+          return this.clearedCards.length;
         },
         flipCard(card) {
           card.flipped = !card.flipped;
           if (this.flippedCards.length == 2) {
-            if (this.flippedCards[0].color == this.flippedCards[1].color) {
+            if (this.hasMatch()) {
               this.flippedCards.forEach((c) => (c.cleared = true));
             }
+            this.flippedCards.forEach((c) => (c.flipped = false));
+            if (this.remainingCards.length === 0) {
+              alert("YOU WON");
+              this.cards.forEach((c) => (c.cleared = false));
+            }
           }
+        },
+        hasMatch() {
+          return this.flippedCards[0].color == this.flippedCards[1].color;
         },
       };
     }
