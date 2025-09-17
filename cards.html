@@ -71,13 +71,17 @@
           card.flipped = !card.flipped;
           if (this.flippedCards.length == 2) {
             if (this.hasMatch()) {
-              this.flippedCards.forEach((c) => (c.cleared = true));
+              setTimeout(() => {
+                this.flippedCards.forEach((c) => (c.cleared = true));
+                if (this.remainingCards.length === 0) {
+                  alert("YOU WON");
+                  this.cards.forEach((c) => (c.cleared = false));
+                }
+              }, 1000);
             }
-            this.flippedCards.forEach((c) => (c.flipped = false));
-            if (this.remainingCards.length === 0) {
-              alert("YOU WON");
-              this.cards.forEach((c) => (c.cleared = false));
-            }
+            setTimeout(() => {
+              this.flippedCards.forEach((c) => (c.flipped = false));
+            }, 1000);
           }
         },
         hasMatch() {
