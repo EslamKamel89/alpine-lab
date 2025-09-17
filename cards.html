@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alpine</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <div x-data="game()" class="max-w-3xl px-10 mx-auto py-10">
+      <header>
+        <div class="flex w-full justify-between">
+          <h1>Welcome to alpine</h1>
+          <div
+            class="text-4xl rounded-full p-2 border my-2"
+            x-text="points"
+          ></div>
+        </div>
+      </header>
+      <main>
+        <div class="grid !grid-cols-4 gap-10">
+          <template x-for="card in cards">
+            <div>
+              <article
+                x-show="!card.cleared"
+                class="min-h-32 cursor-pointer"
+                :style="{backgroundColor: card.flipped? card.color : '#999'}"
+                @click="flipCard(card)"
+              ></article>
+            </div>
+          </template>
+        </div>
+      </main>
+      <footer></footer>
+    </div>
+  </body>
+  <script>
+    function game() {
+      return {
+        cards: [
+          { color: "green", flipped: false, cleared: false },
+          { color: "red", flipped: false, cleared: false },
+          { color: "blue", flipped: false, cleared: false },
+          { color: "yellow", flipped: false, cleared: false },
+          { color: "green", flipped: false, cleared: false },
+          { color: "red", flipped: false, cleared: false },
+          { color: "blue", flipped: false, cleared: false },
+          { color: "yellow", flipped: false, cleared: false },
+        ],
+        get flippedCards() {
+          return this.cards.filter((c) => c.flipped);
+        },
+        get points() {
+          return 5;
+        },
+        flipCard(card) {
+          card.flipped = !card.flipped;
+          if (this.flippedCards.length == 2) {
+            if (this.flippedCards[0].color == this.flippedCards[1].color) {
+              this.flippedCards.forEach((c) => (c.cleared = true));
+            }
+          }
+        },
+      };
+    }
+  </script>
+</html>
