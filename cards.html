@@ -43,6 +43,9 @@
     </div>
   </body>
   <script>
+    async function pause(milliseconds = 500) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
     function game() {
       return {
         cards: [
@@ -67,21 +70,19 @@
         get points() {
           return this.clearedCards.length;
         },
-        flipCard(card) {
+        async flipCard(card) {
           card.flipped = !card.flipped;
           if (this.flippedCards.length == 2) {
             if (this.hasMatch()) {
-              setTimeout(() => {
-                this.flippedCards.forEach((c) => (c.cleared = true));
-                if (this.remainingCards.length === 0) {
-                  alert("YOU WON");
-                  this.cards.forEach((c) => (c.cleared = false));
-                }
-              }, 1000);
+              await pause();
+              this.flippedCards.forEach((c) => (c.cleared = true));
+              if (this.remainingCards.length === 0) {
+                alert("YOU WON");
+                this.cards.forEach((c) => (c.cleared = false));
+              }
             }
-            setTimeout(() => {
-              this.flippedCards.forEach((c) => (c.flipped = false));
-            }, 1000);
+            await pause();
+            this.flippedCards.forEach((c) => (c.flipped = false));
           }
         },
         hasMatch() {
