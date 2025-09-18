@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two way bindings</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="w-full">
+    <article class="max-w-xl mx-auto m-10" x-data="app()">
+      <form @submit.prevent="submit">
+        <div class="">
+          <label for="name" x-text="`Name: ${form.name}`"></label>
+          <input
+            id="name"
+            type="text"
+            name="text"
+            placeholder="Please enter you name"
+            aria-label="Text"
+            aria-invalid=""
+            x-model="form.name"
+          />
+          <input
+            id="name"
+            type="text"
+            name="text"
+            placeholder="Please enter you name"
+            aria-label="Text"
+            aria-invalid=""
+            :value="form.name"
+            @input="form.name = $event.target.value"
+          />
+        </div>
+        <button type="submit">Submit</button>
+        <div>
+          <template x-if="user">
+            <pre x-text="JSON.stringify(user)"></pre>
+          </template>
+        </div>
+      </form>
+    </article>
+    <script>
+      function app() {
+        return {
+          form: {
+            name: "Eslam Ahmed",
+          },
+          user: null,
+          submit() {
+            fetch("http://127.0.0.1:8000/api/test", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(this.form),
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                this.user = json;
+                console.log(this.user);
+              });
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
