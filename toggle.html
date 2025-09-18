@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toggle visibility</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="w-full">
+    <article class="max-w-xl mx-auto m-10" x-data="{show:true}">
+      <div class="flex !space-x-4 flex-col">
+        <button
+          @click="show=!show"
+          class="text-lg"
+          x-text="show? 'Hide 🚪' : 'Show 🔭'"
+        ></button>
+        <ul x-show="show" class="p-3">
+          <li><a href="/" style="display: block">Home</a></li>
+          <li><a href="/" style="display: block">About</a></li>
+          <li><a href="/" style="display: block">Contact</a></li>
+        </ul>
+      </div>
+    </article>
+    <article class="max-w-xl mx-auto m-10" x-data="{currentTab:''}">
+      <div class="flex flex-row !items-center !justify-center !space-x-2">
+        <button
+          @click="currentTab='home'"
+          :class="{'!bg-green-500':currentTab =='home'}"
+        >
+          Home
+        </button>
+        <button
+          @click="currentTab='about'"
+          :class="{'!bg-green-500':currentTab =='about'}"
+        >
+          About
+        </button>
+        <button
+          @click="currentTab='contact'"
+          :class="{'!bg-green-500':currentTab =='contact'}"
+        >
+          Contact
+        </button>
+      </div>
+      <div>
+        <article
+          x-show="currentTab == 'home'"
+          class="!bg-gray-700 my-4 rounded-lg"
+        >
+          Home tab
+        </article>
+        <article
+          x-show="currentTab == 'about'"
+          class="!bg-gray-700 my-4 rounded-lg"
+        >
+          About tab
+        </article>
+        <article
+          x-show="currentTab == 'contact'"
+          class="!bg-gray-700 my-4 rounded-lg"
+        >
+          Contact tab
+        </article>
+      </div>
+    </article>
+  </body>
+</html>
