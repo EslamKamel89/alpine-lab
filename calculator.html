@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="w-full">
+    <div  class="max-w-xl mx-auto p-10">
+      <div x-data="{first:0 , second:0}">
+        <div class="flex flex-row !space-x-2 !items-center justify-center">
+          <input x-model.number="first" type="number"> 
+          <div class="text-lg">+</div> 
+          <input x-model.number="second" type="number"> 
+          <div class="text-lg">=</div> 
+          <div x-text="first + second"></div>
+        </div>
+      </div>
+  </body>
+</html>
