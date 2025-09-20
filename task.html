@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task app</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="w-full">
+    <article class="max-w-xl mx-auto m-10" x-data="app()">
+      <form @submit.prevent="add">
+        <div>
+          <label for="newTask">New Task</label>
+          <input
+            type="text"
+            id="newTask"
+            x-model="newTask"
+            placeholder="go to the ......"
+            aria-invalid=""
+          />
+        </div>
+        <button type="submit" class="outline contrast">Save</button>
+      </form>
+      <div>
+        <template x-for="(task , index) in tasks" :key="`${index}-${task}`">
+          <div
+            class="border rounded-lg shadow-lg p-3 my-2 flex justify-between"
+            :class="{'border-blue-500':task.completed}"
+          >
+            <div
+              x-text="task.body"
+              :class="{'line-through':task.completed}"
+            ></div>
+            <input type="checkbox" x-model="task.completed" />
+          </div>
+        </template>
+      </div>
+    </article>
+  </body>
+  <script src="./task.js"></script>
+</html>
