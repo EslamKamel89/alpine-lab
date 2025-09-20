@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition 001</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="w-full">
+    <article class="max-w-xl mx-auto m-10" x-data="app()">
+      <div class="flex flex-wrap space-x-2">
+        <!-- comp 1 -->
+        <div class="w-12 h-12 rounded">
+          <div class="bg-green-400 rounded w-full h-full" x-show="show"></div>
+        </div>
+        <!-- comp 2 -->
+        <div class="w-12 h-12 rounded">
+          <div
+            class="bg-green-400 rounded w-full h-full"
+            x-show="show"
+            x-transition.duration.1000ms.scale.0.opacity.0
+          ></div>
+        </div>
+        <!-- comp 2 -->
+        <div class="w-12 h-12 rounded">
+          <div
+            class="bg-green-400 rounded w-full h-full"
+            x-show="show"
+            x-transition:enter="transition duration-2000"
+            x-transition:enter-start="opacity-0 scale-0"
+            x-transition:enter-end=" opacity-100 scale-100"
+            x-transition:leave="transition duration-2000"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end=" opacity-0 scale-0"
+          ></div>
+        </div>
+      </div>
+      <button @click="toggle" class="!my-3">Toggle</button>
+    </article>
+    <script>
+      function app() {
+        return {
+          show: true,
+          toggle() {
+            this.show = !this.show;
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
