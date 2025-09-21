@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="w-full">
+    <article class="max-w-xl mx-auto m-10" x-data="app()">
+      <button
+        @click="flash({title:'test title'  , description: 'test description'})"
+      >
+        Click
+      </button>
+    </article>
+    <dialog x-data="flashComp()" :open="open" @flash.window="flash">
+      <article>
+        <header>
+          <button aria-label="Close" rel="prev" @click="close()"></button>
+          <p>
+            <strong x-text="title"></strong>
+          </p>
+        </header>
+        <p x-text="description"></p>
+      </article>
+    </dialog>
+    <script>
+      function app() {
+        return {};
+      }
+      function flashComp() {
+        return {
+          open: false,
+          title: "success",
+          description: "congratulations",
+          flash(event) {
+            this.open = true;
+            this.title = event.detail.title;
+            this.description = event.detail.description;
+            setTimeout(() => {
+              this.open = false;
+            }, 2000);
+          },
+          close() {
+            this.open = false;
+          },
+        };
+      }
+      window.flash = (data = {}) => {
+        window.dispatchEvent(new CustomEvent("flash", { detail: data }));
+      };
+    </script>
+  </body>
+</html>
