@@ -6,11 +6,15 @@
     <title>Todo • Tailwind (Static Template)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <meta name="color-scheme" content="light dark" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
   </head>
   <body
     class="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 text-slate-800 dark:from-slate-900 dark:to-slate-800 dark:text-slate-100"
   >
-    <main class="container mx-auto px-4 py-10 md:py-16">
+    <main class="container mx-auto px-4 py-10 md:py-16" x-data="todoApp()">
       <section class="mx-auto max-w-2xl">
         <!-- App Card -->
         <div
@@ -59,14 +63,10 @@
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               </div>
-              <input type="text" placeholder="What needs to be done?"
-              class="w-full rounded-xl border border-slate-300 bg-white/70 px-4
-              py-3 text-base outline-none ring-offset-2 transition
-              focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300
-              dark:border-slate-700 dark:bg-slate-900/60
-              dark:focus:border-indigo-500 dark:focus:ring-indigo-500/30"
-
-              <!-- Alpine idea: x-model="newTitle" @keydown.enter.prevent="addTodo()" -->
+              <input
+                type="text"
+                placeholder="What needs to be done?"
+                class="w-full rounded-xl border border-slate-300 bg-white/70 px-4 py-3 text-base outline-none ring-offset-2 transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 dark:border-slate-700 dark:bg-slate-900/60 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/30"
               />
               <button
                 type="button"
@@ -82,122 +82,70 @@
             class="divide-y divide-slate-200 dark:divide-slate-800"
             role="list"
             aria-label="Todo list"
+            x-show="todos.length"
           >
-            <!-- Item (active) -->
-            <li
-              class="group flex items-start gap-3 px-5 py-4 md:px-8"
-              data-id="1"
-            >
-              <label class="flex cursor-pointer select-none items-start gap-3">
-                <input
-                  type="checkbox"
-                  class="mt-1 h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-900"
-                  aria-label="Toggle todo"
-                />
-                <span class="leading-6">
-                  <span class="block text-base"
-                    >Build the Alpine.js interactions</span
-                  >
-                  <span class="block text-sm text-slate-500 dark:text-slate-400"
-                    >Bind x-model, add events, and persist to localStorage</span
-                  >
-                </span>
-              </label>
-              <button
-                type="button"
-                class="invisible ml-auto rounded-lg p-2 text-slate-400 hover:text-rose-500 group-hover:visible"
-                aria-label="Delete todo"
+            <template x-for="todo in todos" :key="todo.id">
+              <!-- Item (active) -->
+              <li
+                class="group flex items-start gap-3 px-5 py-4 md:px-8"
+                data-id="1"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-5 w-5"
+                <div
+                  class="flex cursor-pointer select-none items-start w-full gap-3"
                 >
-                  <path
-                    d="M9 3h6a1 1 0 011 1v1h4a1 1 0 010 2h-1.08l-.82 12.3A3 3 0 0115.11 23H8.89a3 3 0 01-2.99-2.7L5.08 7H4a1 1 0 110-2h4V4a1 1 0 011-1zm2 0v1h2V3h-2zM7.08 7l.8 12a1 1 0 00.99.92h6.26a1 1 0 00.99-.92l.8-12H7.08z"
+                  <input
+                    type="checkbox"
+                    class="mt-1 h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-900"
+                    aria-label="Toggle todo"
+                    x-model="todo.completed"
                   />
-                </svg>
-              </button>
-            </li>
-
-            <!-- Item (completed state example) -->
-            <li
-              class="group flex items-start gap-3 px-5 py-4 md:px-8"
-              data-id="2"
-            >
-              <label class="flex cursor-pointer select-none items-start gap-3">
-                <input
-                  checked
-                  type="checkbox"
-                  class="mt-1 h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-900"
-                  aria-label="Toggle todo"
-                />
-                <span class="leading-6">
-                  <!-- Completed styling: line-through + muted color -->
-                  <span
-                    class="block text-base line-through decoration-2 decoration-slate-400/70 text-slate-400 dark:text-slate-500"
-                    >Design the UI</span
-                  >
-                  <span
-                    class="block text-sm text-slate-400/80 dark:text-slate-500/90"
-                    >Inputs, list, filters, and actions</span
-                  >
-                </span>
-              </label>
-              <button
-                type="button"
-                class="invisible ml-auto rounded-lg p-2 text-slate-400 hover:text-rose-500 group-hover:visible"
-                aria-label="Delete todo"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-5 w-5"
+                  <div class="flex flex-col space-y-2 w-full">
+                    <input
+                      type="text"
+                      x-show="!todo.completed && todo.edit"
+                      x-model="todo.title"
+                      class="p-2 rounded-lg"
+                      @click.away="todo.edit=false"
+                    />
+                    <span
+                      x-show="!todo.edit"
+                      x-bind:class="{'block text-base':true , 'line-through decoration-2 decoration-slate-400/70 text-slate-400 dark:text-slate-500':todo.completed}"
+                      x-text="todo.title"
+                      @click="todo.edit=true"
+                    ></span>
+                    <input
+                      type="text"
+                      x-show="!todo.completed  && todo.editDescription"
+                      x-model="todo.description"
+                      class="p-2 rounded-lg w-full"
+                      @click.away="todo.editDescription=false"
+                    />
+                    <span
+                      class="block text-sm text-slate-500 dark:text-slate-400"
+                      x-show="!todo.editDescription"
+                      x-text="todo.description"
+                      @click="todo.editDescription=true"
+                    ></span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="invisible ml-auto rounded-lg p-2 text-slate-400 hover:text-rose-500 group-hover:visible"
+                  aria-label="Delete todo"
                 >
-                  <path
-                    d="M9 3h6a1 1 0 011 1v1h4a1 1 0 010 2h-1.08l-.82 12.3A3 3 0 0115.11 23H8.89a3 3 0 01-2.99-2.7L5.08 7H4a1 1 0 110-2h4V4a1 1 0 011-1zm2 0v1h2V3h-2zM7.08 7l.8 12a1 1 0 00.99.92h6.26a1 1 0 00.99-.92l.8-12H7.08z"
-                  />
-                </svg>
-              </button>
-            </li>
-
-            <!-- Item (another active) -->
-            <li
-              class="group flex items-start gap-3 px-5 py-4 md:px-8"
-              data-id="3"
-            >
-              <label class="flex cursor-pointer select-none items-start gap-3">
-                <input
-                  type="checkbox"
-                  class="mt-1 h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-900"
-                  aria-label="Toggle todo"
-                />
-                <span class="leading-6">
-                  <span class="block text-base">Write unit tests</span>
-                  <span class="block text-sm text-slate-500 dark:text-slate-400"
-                    >Focus on add, toggle, filter, and clear‑completed</span
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="h-5 w-5"
                   >
-                </span>
-              </label>
-              <button
-                type="button"
-                class="invisible ml-auto rounded-lg p-2 text-slate-400 hover:text-rose-500 group-hover:visible"
-                aria-label="Delete todo"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-5 w-5"
-                >
-                  <path
-                    d="M9 3h6a1 1 0 011 1v1h4a1 1 0 010 2h-1.08l-.82 12.3A3 3 0 0115.11 23H8.89a3 3 0 01-2.99-2.7L5.08 7H4a1 1 0 110-2h4V4a1 1 0 011-1zm2 0v1h2V3h-2zM7.08 7l.8 12a1 1 0 00.99.92h6.26a1 1 0 00.99-.92l.8-12H7.08z"
-                  />
-                </svg>
-              </button>
-            </li>
+                    <path
+                      d="M9 3h6a1 1 0 011 1v1h4a1 1 0 010 2h-1.08l-.82 12.3A3 3 0 0115.11 23H8.89a3 3 0 01-2.99-2.7L5.08 7H4a1 1 0 110-2h4V4a1 1 0 011-1zm2 0v1h2V3h-2zM7.08 7l.8 12a1 1 0 00.99.92h6.26a1 1 0 00.99-.92l.8-12H7.08z"
+                    />
+                  </svg>
+                </button>
+              </li>
+            </template>
           </ul>
 
           <!-- Footer: Filters / Counter / Clear Completed -->
@@ -256,5 +204,124 @@
         </div>
       </section>
     </main>
+    <script>
+      function todoApp() {
+        return {
+          todos: [
+            {
+              id: 1,
+              title: "Buy groceries for the week",
+              description: "Milk, eggs, bread, fruits, and vegetables",
+              completed: false,
+              dueDate: "2024-01-15",
+              priority: "medium",
+              category: "shopping",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 2,
+              title: "Finish React project",
+              description: "Complete the todo app with all features",
+              completed: true,
+              dueDate: "2024-01-10",
+              priority: "high",
+              category: "work",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 3,
+              title: "Call mom",
+              description: "Check how she's doing and plan weekend visit",
+              completed: false,
+              dueDate: "2024-01-12",
+              priority: "medium",
+              category: "personal",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 4,
+              title: "Gym workout",
+              description: "Chest and triceps day - 45 minutes",
+              completed: false,
+              dueDate: "2024-01-11",
+              priority: "low",
+              category: "health",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 5,
+              title: "Read book",
+              description: "Atomic Habits - Chapter 5",
+              completed: true,
+              dueDate: "2024-01-08",
+              priority: "low",
+              category: "personal",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 6,
+              title: "Prepare meeting presentation",
+              description: "Slides for quarterly review meeting",
+              completed: false,
+              dueDate: "2024-01-14",
+              priority: "high",
+              category: "work",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 7,
+              title: "Pay electricity bill",
+              description: "Due by end of the month",
+              completed: false,
+              dueDate: "2024-01-31",
+              priority: "medium",
+              category: "finance",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 8,
+              title: "Clean the apartment",
+              description: "Vacuum, dust, and organize living room",
+              completed: true,
+              dueDate: "2024-01-07",
+              priority: "medium",
+              category: "home",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 9,
+              title: "Learn new JavaScript framework",
+              description: "Spend 1 hour learning Vue.js basics",
+              completed: false,
+              dueDate: "2024-01-13",
+              priority: "high",
+              category: "learning",
+              edit: false,
+              editDescription: false,
+            },
+            {
+              id: 10,
+              title: "Plan weekend trip",
+              description:
+                "Research hotels and activities for mountain getaway",
+              completed: false,
+              dueDate: "2024-01-16",
+              priority: "low",
+              category: "travel",
+              edit: false,
+              editDescription: false,
+            },
+          ],
+        };
+      }
+    </script>
   </body>
 </html>
