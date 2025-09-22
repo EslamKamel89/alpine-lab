@@ -45,6 +45,7 @@
             <form
               class="relative flex items-center gap-3"
               aria-label="Add new todo"
+              @submit.prevent="addTodo"
             >
               <!-- Checkbox placeholder (for symmetry) -->
               <div
@@ -66,10 +67,11 @@
               <input
                 type="text"
                 placeholder="What needs to be done?"
+                x-model="title"
                 class="w-full rounded-xl border border-slate-300 bg-white/70 px-4 py-3 text-base outline-none ring-offset-2 transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 dark:border-slate-700 dark:bg-slate-900/60 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/30"
               />
               <button
-                type="button"
+                type="submit"
                 class="shrink-0 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900"
               >
                 Add
@@ -79,7 +81,7 @@
 
           <!-- List -->
           <ul
-            class="divide-y divide-slate-200 dark:divide-slate-800"
+            class="divide-y divide-slate-200 dark:divide-slate-800 flex flex-col-reverse"
             role="list"
             aria-label="Todo list"
             x-show="todos.length"
@@ -106,9 +108,10 @@
                       x-model="todo.title"
                       class="p-2 rounded-lg"
                       @click.away="todo.edit=false"
+                      @keyup.enter="todo.edit=false"
                     />
                     <span
-                      x-show="!todo.edit"
+                      x-show="!todo.edit || todo.completed"
                       x-bind:class="{'block text-base':true , 'line-through decoration-2 decoration-slate-400/70 text-slate-400 dark:text-slate-500':todo.completed}"
                       x-text="todo.title"
                       @click="todo.edit=true"
@@ -119,10 +122,11 @@
                       x-model="todo.description"
                       class="p-2 rounded-lg w-full"
                       @click.away="todo.editDescription=false"
+                      @keyup.enter="todo.editDescription=false"
                     />
                     <span
                       class="block text-sm text-slate-500 dark:text-slate-400"
-                      x-show="!todo.editDescription"
+                      x-show="!todo.editDescription || todo.completed"
                       x-text="todo.description"
                       @click="todo.editDescription=true"
                     ></span>
@@ -132,6 +136,7 @@
                   type="button"
                   class="invisible ml-auto rounded-lg p-2 text-slate-400 hover:text-rose-500 group-hover:visible"
                   aria-label="Delete todo"
+                  @click="removeTodo(todo)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -150,6 +155,7 @@
 
           <!-- Footer: Filters / Counter / Clear Completed -->
           <footer
+            x-show="todos.length"
             class="flex flex-col gap-4 border-t border-slate-200 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-8 dark:border-slate-700"
           >
             <!-- Counter -->
@@ -157,10 +163,12 @@
               class="order-2 text-sm text-slate-600 dark:text-slate-300 md:order-1"
             >
               <span aria-live="polite" aria-atomic="true">
-                <strong class="font-semibold">2</strong>
+                <strong
+                  class="font-semibold"
+                  x-text="uncompletedTodos.length"
+                ></strong>
               </span>
               items left
-              <!-- Alpine idea: replace 2 with a computed count of !completed -->
             </p>
 
             <!-- Filters -->
@@ -191,7 +199,10 @@
             </nav>
 
             <!-- Clear Completed -->
-            <div class="order-3 text-center md:order-3">
+            <div
+              class="order-3 text-center md:order-3"
+              x-show="completedTodos.length"
+            >
               <button
                 type="button"
                 class="rounded-xl px-3 py-1.5 text-sm font-semibold text-rose-600 ring-1 ring-rose-200 hover:bg-rose-50 dark:ring-rose-800/40 dark:hover:bg-rose-900/20"
@@ -204,122 +215,35 @@
         </div>
       </section>
     </main>
+    <script src="./todos_data.js"></script>
     <script>
       function todoApp() {
         return {
-          todos: [
-            {
-              id: 1,
-              title: "Buy groceries for the week",
-              description: "Milk, eggs, bread, fruits, and vegetables",
-              completed: false,
-              dueDate: "2024-01-15",
-              priority: "medium",
-              category: "shopping",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 2,
-              title: "Finish React project",
-              description: "Complete the todo app with all features",
-              completed: true,
-              dueDate: "2024-01-10",
-              priority: "high",
-              category: "work",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 3,
-              title: "Call mom",
-              description: "Check how she's doing and plan weekend visit",
-              completed: false,
-              dueDate: "2024-01-12",
-              priority: "medium",
-              category: "personal",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 4,
-              title: "Gym workout",
-              description: "Chest and triceps day - 45 minutes",
-              completed: false,
-              dueDate: "2024-01-11",
-              priority: "low",
-              category: "health",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 5,
-              title: "Read book",
-              description: "Atomic Habits - Chapter 5",
-              completed: true,
-              dueDate: "2024-01-08",
-              priority: "low",
-              category: "personal",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 6,
-              title: "Prepare meeting presentation",
-              description: "Slides for quarterly review meeting",
-              completed: false,
-              dueDate: "2024-01-14",
-              priority: "high",
-              category: "work",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 7,
-              title: "Pay electricity bill",
-              description: "Due by end of the month",
-              completed: false,
-              dueDate: "2024-01-31",
-              priority: "medium",
-              category: "finance",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 8,
-              title: "Clean the apartment",
-              description: "Vacuum, dust, and organize living room",
-              completed: true,
-              dueDate: "2024-01-07",
-              priority: "medium",
-              category: "home",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 9,
-              title: "Learn new JavaScript framework",
-              description: "Spend 1 hour learning Vue.js basics",
-              completed: false,
-              dueDate: "2024-01-13",
-              priority: "high",
-              category: "learning",
-              edit: false,
-              editDescription: false,
-            },
-            {
-              id: 10,
-              title: "Plan weekend trip",
-              description:
-                "Research hotels and activities for mountain getaway",
+          todos: todosData,
+          title: "",
+          get uncompletedTodos() {
+            return this.todos.filter((t) => !t.completed);
+          },
+          get completedTodos() {
+            return this.todos.filter((t) => t.completed);
+          },
+          addTodo() {
+            this.todos.push({
+              id: Date.now(),
+              title: this.title,
+              description: "Tap to add description",
               completed: false,
               dueDate: "2024-01-16",
               priority: "low",
               category: "travel",
               edit: false,
               editDescription: false,
-            },
-          ],
+            });
+            this.title = "";
+          },
+          removeTodo(todo) {
+            this.todos = this.todos.filter((t) => t.id !== todo.id);
+          },
         };
       }
     </script>
