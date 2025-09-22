@@ -25,13 +25,12 @@
                 Todos
               </h1>
               <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                A beautiful, responsive static template to wire up with
-                Alpine.js
+                WORK HARD PLAY HARD
               </p>
             </div>
             <!-- Theme hint (optional) -->
             <span class="hidden text-xs text-slate-400 md:inline"
-              >Dark‑mode ready</span
+              >100% is easier than 90%</span
             >
           </header>
 
@@ -255,48 +254,6 @@
             </div>
           </footer>
         </div>
-
-        <!-- Tiny helper notes for wiring with Alpine (for your learning) -->
-        <aside
-          class="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-300"
-        >
-          <details
-            class="group rounded-xl border border-slate-200 p-4 dark:border-slate-700"
-          >
-            <summary class="cursor-pointer select-none font-semibold">
-              Alpine.js wiring tips
-            </summary>
-            <div class="mt-3 space-y-2 leading-relaxed">
-              <pre
-                class="overflow-x-auto rounded-lg bg-slate-900/90 p-4 text-slate-100"
-              ><code>// Root state example
-&lt;section x-data="{
-  todos: [
-    { id: 1, title: 'Build the Alpine.js interactions', completed: false },
-    { id: 2, title: 'Design the UI', completed: true },
-    { id: 3, title: 'Write unit tests', completed: false },
-  ],
-  newTitle: '',
-  filter: 'all',
-  get remaining() { return this.todos.filter(t =&gt; !t.completed).length },
-  get filtered() {
-    if (this.filter === 'active') return this.todos.filter(t =&gt; !t.completed)
-    if (this.filter === 'completed') return this.todos.filter(t =&gt; t.completed)
-    return this.todos
-  }
-}"&gt;
-
-// Bindings to add:
-// - Input: x-model="newTitle" @keydown.enter.prevent="addTodo()"
-// - Checkbox: @change="toggle(todo)" :checked="todo.completed"
-// - Item class: :class="todo.completed ? 'line-through text-slate-400' : ''"
-// - Counter: x-text="remaining"
-// - Filters: @click="filter='active'" etc.
-// - Clear: @click="todos = todos.filter(t =&gt; !t.completed)"
-</code></pre>
-            </div>
-          </details>
-        </aside>
       </section>
     </main>
   </body>
