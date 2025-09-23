@@ -2,7 +2,9 @@ todosData = [
   {
     id: 1,
     title: "Buy groceries for the week",
+    oldTitle: "",
     description: "Milk, eggs, bread, fruits, and vegetables",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-15",
     priority: "medium",
@@ -13,7 +15,9 @@ todosData = [
   {
     id: 2,
     title: "Finish React project",
+    oldTitle: "",
     description: "Complete the todo app with all features",
+    oldDescription: "",
     completed: true,
     dueDate: "2024-01-10",
     priority: "high",
@@ -24,7 +28,9 @@ todosData = [
   {
     id: 3,
     title: "Call mom",
+    oldTitle: "",
     description: "Check how she's doing and plan weekend visit",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-12",
     priority: "medium",
@@ -35,7 +41,9 @@ todosData = [
   {
     id: 4,
     title: "Gym workout",
+    oldTitle: "",
     description: "Chest and triceps day - 45 minutes",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-11",
     priority: "low",
@@ -46,7 +54,9 @@ todosData = [
   {
     id: 5,
     title: "Read book",
+    oldTitle: "",
     description: "Atomic Habits - Chapter 5",
+    oldDescription: "",
     completed: true,
     dueDate: "2024-01-08",
     priority: "low",
@@ -57,7 +67,9 @@ todosData = [
   {
     id: 6,
     title: "Prepare meeting presentation",
+    oldTitle: "",
     description: "Slides for quarterly review meeting",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-14",
     priority: "high",
@@ -68,7 +80,9 @@ todosData = [
   {
     id: 7,
     title: "Pay electricity bill",
+    oldTitle: "",
     description: "Due by end of the month",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-31",
     priority: "medium",
@@ -79,7 +93,9 @@ todosData = [
   {
     id: 8,
     title: "Clean the apartment",
+    oldTitle: "",
     description: "Vacuum, dust, and organize living room",
+    oldDescription: "",
     completed: true,
     dueDate: "2024-01-07",
     priority: "medium",
@@ -90,7 +106,9 @@ todosData = [
   {
     id: 9,
     title: "Learn new JavaScript framework",
+    oldTitle: "",
     description: "Spend 1 hour learning Vue.js basics",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-13",
     priority: "high",
@@ -101,7 +119,9 @@ todosData = [
   {
     id: 10,
     title: "Plan weekend trip",
+    oldTitle: "",
     description: "Research hotels and activities for mountain getaway",
+    oldDescription: "",
     completed: false,
     dueDate: "2024-01-16",
     priority: "low",
@@ -110,4 +130,4 @@ todosData = [
     editDescription: false,
   },
 ];
-todosData = [];
+// todosData = [];

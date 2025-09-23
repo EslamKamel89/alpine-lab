@@ -86,7 +86,7 @@
             aria-label="Todo list"
             x-show="todos.length"
           >
-            <template x-for="todo in todos" :key="todo.id">
+            <template x-for="todo in filteredTodos" :key="todo.id">
               <!-- Item (active) -->
               <li
                 class="group flex items-start gap-3 px-5 py-4 md:px-8"
@@ -109,12 +109,13 @@
                       class="p-2 rounded-lg"
                       @click.away="todo.edit=false"
                       @keyup.enter="todo.edit=false"
+                      @keyup.escape="todo.title = todo.oldTitle; todo.edit= false;"
                     />
                     <span
                       x-show="!todo.edit || todo.completed"
                       x-bind:class="{'block text-base':true , 'line-through decoration-2 decoration-slate-400/70 text-slate-400 dark:text-slate-500':todo.completed}"
                       x-text="todo.title"
-                      @click="todo.edit=true"
+                      @dblclick="todo.edit=true;todo.oldTitle = todo.title;"
                     ></span>
                     <input
                       type="text"
@@ -123,12 +124,13 @@
                       class="p-2 rounded-lg w-full"
                       @click.away="todo.editDescription=false"
                       @keyup.enter="todo.editDescription=false"
+                      @keyup.escape="todo.description = todo.oldDescription; todo.editDescription = false;"
                     />
                     <span
                       class="block text-sm text-slate-500 dark:text-slate-400"
                       x-show="!todo.editDescription || todo.completed"
                       x-text="todo.description"
-                      @click="todo.editDescription=true"
+                      @dblclick="todo.editDescription=true; todo.oldDescription = todo.description"
                     ></span>
                   </div>
                 </div>
@@ -179,19 +181,25 @@
               <!-- Selected style: bg-indigo-600 text-white; Unselected: hover:bg-slate-100 -->
               <button
                 type="button"
-                class="rounded-xl px-3 py-1.5 text-sm font-medium text-white shadow-sm ring-1 ring-indigo-500/10 bg-indigo-600"
+                class="rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 ring- dark:text-slate-200 dark:ring-slate-700"
+                :class="{'bg-indigo-600': filter=='all'}"
+                @click="filter= 'all'"
               >
                 All
               </button>
               <button
                 type="button"
-                class="rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800"
+                class="rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200 dark:text-slate-200 dark:ring-slate-700"
+                :class="{'bg-indigo-600': filter=='active'}"
+                @click="filter='active'"
               >
                 Active
               </button>
               <button
                 type="button"
-                class="rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800"
+                class="rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200 dark:text-slate-200 dark:ring-slate-700"
+                :class="{'bg-indigo-600': filter=='completed'}"
+                @click="filter = 'completed'"
               >
                 Completed
               </button>
@@ -202,6 +210,7 @@
             <div
               class="order-3 text-center md:order-3"
               x-show="completedTodos.length"
+              @click="clearCompleted"
             >
               <button
                 type="button"
@@ -219,13 +228,17 @@
     <script>
       function todoApp() {
         return {
-          todos: todosData,
+          todos: Array.from(todosData),
           title: "",
+          filter: "all",
           get uncompletedTodos() {
             return this.todos.filter((t) => !t.completed);
           },
           get completedTodos() {
             return this.todos.filter((t) => t.completed);
+          },
+          clearCompleted() {
+            this.todos = this.todos.filter((t) => !t.completed);
           },
           addTodo() {
             this.todos.push({
@@ -243,6 +256,13 @@
           },
           removeTodo(todo) {
             this.todos = this.todos.filter((t) => t.id !== todo.id);
+          },
+          get filteredTodos() {
+            if (this.filter === "all") return this.todos;
+            if (this.filter === "completed")
+              return this.todos.filter((t) => t.completed);
+            if (this.filter === "active")
+              return this.todos.filter((t) => !t.completed);
           },
         };
       }
