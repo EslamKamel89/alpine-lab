@@ -64,12 +64,18 @@
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               </div>
-              <input
-                type="text"
-                placeholder="What needs to be done?"
-                x-model="title"
-                class="w-full rounded-xl border border-slate-300 bg-white/70 px-4 py-3 text-base outline-none ring-offset-2 transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 dark:border-slate-700 dark:bg-slate-900/60 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/30"
-              />
+              <div class="flex flex-col w-full">
+                <input
+                  type="text"
+                  placeholder="What needs to be done?"
+                  x-model="title"
+                  class="w-full rounded-xl border border-slate-300 bg-white/70 px-4 py-3 text-base outline-none ring-offset-2 transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-300 dark:border-slate-700 dark:bg-slate-900/60 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/30"
+                />
+                <span
+                  class="text-red-500 text-xs my-2"
+                  x-text="errors?.title"
+                ></span>
+              </div>
               <button
                 type="submit"
                 class="shrink-0 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900"
@@ -101,6 +107,7 @@
                     aria-label="Toggle todo"
                     x-model="todo.completed"
                   />
+
                   <div class="flex flex-col space-y-2 w-full">
                     <input
                       type="text"
@@ -231,6 +238,7 @@
           todos: Array.from(todosData),
           title: "",
           filter: "all",
+          errors: {},
           get uncompletedTodos() {
             return this.todos.filter((t) => !t.completed);
           },
@@ -241,6 +249,10 @@
             this.todos = this.todos.filter((t) => !t.completed);
           },
           addTodo() {
+            if (this.title === "") {
+              this.errors.title = "You can't leave the todo title empty";
+              return;
+            }
             this.todos.push({
               id: Date.now(),
               title: this.title,
