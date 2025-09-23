@@ -236,8 +236,15 @@
     </main>
     <script src="./todos_data.js"></script>
     <script>
+      todoStore = {
+        cachedTodos: JSON.parse(localStorage.getItem("todo-store") || "[]"),
+        save() {
+          localStorage.setItem("todo-store", JSON.stringify(this.todos));
+        },
+      };
       function todoApp() {
         return {
+          ...todoStore,
           todos: Array.from(todosData),
           title: "",
           filter: "all",
