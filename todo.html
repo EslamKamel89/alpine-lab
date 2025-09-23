@@ -177,7 +177,10 @@
                   x-text="uncompletedTodos.length"
                 ></strong>
               </span>
-              items left
+              <span
+                x-text="uncompletedTodos.length > 1 ? 'items':'item'"
+              ></span>
+              left
             </p>
 
             <!-- Filters -->
